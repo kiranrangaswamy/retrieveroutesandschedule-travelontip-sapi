@@ -1,0 +1,8 @@
+http:
+  listener:
+    host: "localhost"
+    port: "8083"
+  requester:
+    host: "localhost"
+    port: "8081"
+    path: "/travel-on-tip/{serviceType}"
