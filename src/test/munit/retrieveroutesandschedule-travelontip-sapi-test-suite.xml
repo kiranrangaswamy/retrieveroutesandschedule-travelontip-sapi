@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="retrieveroutesandschedule-travelontip-sapi-test-suite.xml" />
+	<munit:test name="retrieveroutesandschedule-travelontip-sapi-test-suite-retrieveroutesandschedule-travelontip-sapi-mainTest" doc:id="459095a6-295f-4917-a0ee-fb5a7b2581e3" description="Test" expectedErrorType="APIKIT:BAD_REQUEST">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="204c39c6-be44-45b5-a63a-09a0342713d8" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="retrieveroutesandschedule-travelontip-sapi-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:BAD_REQUEST" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to retrieveroutesandschedule-travelontip-sapi-main" doc:id="253dc922-31a4-4ba4-94ef-b2f1e733985e" name="retrieveroutesandschedule-travelontip-sapi-main"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="84b60ee0-bc00-4b1f-8d9a-10dbf5b233a6" actual="#[vars.httpStatus]" expected="400"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="retrieveroutesandschedule-travelontip-sapi-test-suite-retrieveroutesandschedule-travelontip-sapi-consoleTest" doc:id="e88638fb-65b2-4b8f-8897-9360b867c1ae" description="Test" expectedErrorType="APIKIT:NOT_FOUND">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="0f34d307-85b5-4256-958d-7a796ac9d64d" processor="apikit:console">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="retrieveroutesandschedule-travelontip-sapi-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:NOT_FOUND" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to retrieveroutesandschedule-travelontip-sapi-console" doc:id="21d8e5c7-ad28-46ce-bc2d-fd9b11a584a4" name="retrieveroutesandschedule-travelontip-sapi-console"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="27ecee93-b07a-43c8-89d1-a5264b90fbea" actual="#[vars.httpStatus]" expected="404"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="retrieveroutesandschedule-travelontip-sapi-test-suite-get:\(transportType)\(transportCompany)\routes:retrieveroutesandschedule-travelontip-sapi-configTest" doc:id="cc210c83-04e6-409f-bdb1-a2c519218f33" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="25564534-a120-45ef-9726-b71a7a6e002b" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="GET" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="64e6ea2f-f76c-4678-a310-5f7028d07d1b" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="HTTP_Request_configuration_for_TravelOnTip" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[output application/java&#10; ---&#10; [ {&#10;    "originLocation": {&#10;      "locationCode": "BEN-SG"&#10;    },&#10;    "destinationLocation": {&#10;      "locationCode": "KLG-MY"&#10;    }&#10;  }]]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="9ba77eff-c5d6-4837-b59c-babba8002ccc" >
+				<munit:attributes value='#[{&#10;	"headers":{"transactionId": "ldhic-oiwjdd-lsl"},&#10;	"uriParams":{"transportCompany": "travel-on-tip",&#10;				"transportType": "bus",&#10;				"serviceType": "routes"}&#10;}]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to get:\(transportType)\(transportCompany)\routes:retrieveroutesandschedule-travelontip-sapi-config" doc:id="9c5c7ad7-d947-4e5c-be0b-153259908f5f" name="get:\(transportType)\(transportCompany)\routes:retrieveroutesandschedule-travelontip-sapi-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert expression" doc:id="be4c183a-8336-4092-9786-f18797cef000" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="retrieveroutesandschedule-travelontip-sapi-test-suite-get:\(transportType)\(transportCompany)\schedules:retrieveroutesandschedule-travelontip-sapi-configTest" doc:id="3d29cffa-b671-4e14-b69c-a64ad0703911" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="0312611b-ec83-4c63-9b74-5518ea9d44ff" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="GET" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="420ac163-e817-401d-9c91-8be7a87fd05f" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="HTTP_Request_configuration_for_TravelOnTip" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[output application/java&#10;---&#10; [{&#10;    "availableSeats": "40",&#10;    "departureDateTime": "2021-03-22T12:12:12.090Z",&#10;    "travelRoute": {&#10;      "destinationLocation": {&#10;        "locationCode": "BEN-SG"&#10;      },&#10;      "originLocation": {&#10;        "locationCode": "KLG-MY"&#10;      }&#10;    }&#10;  }]]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="498c8acc-7f52-4c94-9564-b0f2aa733f65" >
+				<munit:attributes value='#[{&#10;	"headers":{"transactionId": "ldhic-oiwjdd-lsl"},&#10;	"uriParams":{"transportCompany": "travel-on-tip",&#10;				"transportType": "bus",&#10;				"serviceType": "schedules"}&#10;}]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to get:\(transportType)\(transportCompany)\schedules:retrieveroutesandschedule-travelontip-sapi-config" doc:id="b01f4b5f-c151-4944-89de-2225dd3bdc0b" name="get:\(transportType)\(transportCompany)\schedules:retrieveroutesandschedule-travelontip-sapi-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert expression" doc:id="6a5d6aed-2856-4fa9-80fa-451882c77d0d" />
+		</munit:validation>
+	</munit:test>
+
+
+</mule>
